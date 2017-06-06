@@ -3,7 +3,7 @@ namespace BookingApp.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Relacije1 : DbMigration
+    public partial class MyModel : DbMigration
     {
         public override void Up()
         {
@@ -52,9 +52,41 @@ namespace BookingApp.Migrations
                         AccommodationId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Accommodations", t => t.AccommodationId, cascadeDelete: true)
-                .ForeignKey("dbo.AppUsers", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.Accommodations", t => t.AccommodationId, cascadeDelete: false)
+                .ForeignKey("dbo.AppUsers", t => t.UserId, cascadeDelete: false)
                 .Index(t => t.UserId)
+                .Index(t => t.AccommodationId);
+            
+            CreateTable(
+                "dbo.RoomReservations",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        StartDate = c.DateTime(nullable: false),
+                        EndDate = c.DateTime(nullable: false),
+                        Timestamp = c.DateTime(nullable: false),
+                        RoomId = c.Int(nullable: false),
+                        AppUserId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.AppUsers", t => t.AppUserId, cascadeDelete: true)
+                .ForeignKey("dbo.Rooms", t => t.RoomId, cascadeDelete: true)
+                .Index(t => t.RoomId)
+                .Index(t => t.AppUserId);
+            
+            CreateTable(
+                "dbo.Rooms",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        RoomNumber = c.Int(nullable: false),
+                        BedCount = c.Int(nullable: false),
+                        Description = c.String(),
+                        PricePerNight = c.Int(nullable: false),
+                        AccommodationId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Accommodations", t => t.AccommodationId, cascadeDelete: false)
                 .Index(t => t.AccommodationId);
             
             CreateTable(
@@ -91,81 +123,39 @@ namespace BookingApp.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
-            CreateTable(
-                "dbo.Rooms",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        RoomNumber = c.Int(nullable: false),
-                        BedCount = c.Int(nullable: false),
-                        Description = c.String(),
-                        PricePerNight = c.Int(nullable: false),
-                        AccommodationId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Accommodations", t => t.AccommodationId, cascadeDelete: true)
-                .Index(t => t.AccommodationId);
-            
-            CreateTable(
-                "dbo.RoomReservations",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        StartDate = c.DateTime(nullable: false),
-                        EndDate = c.DateTime(nullable: false),
-                        Timestamp = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.RoomReservationRooms",
-                c => new
-                    {
-                        RoomReservation_Id = c.Int(nullable: false),
-                        Room_Id = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.RoomReservation_Id, t.Room_Id })
-                .ForeignKey("dbo.RoomReservations", t => t.RoomReservation_Id, cascadeDelete: true)
-                .ForeignKey("dbo.Rooms", t => t.Room_Id, cascadeDelete: true)
-                .Index(t => t.RoomReservation_Id)
-                .Index(t => t.Room_Id);
-            
-            AddColumn("dbo.AppUsers", "RoomReservation_Id", c => c.Int());
-            CreateIndex("dbo.AppUsers", "RoomReservation_Id");
-            AddForeignKey("dbo.AppUsers", "RoomReservation_Id", "dbo.RoomReservations", "Id");
+            AddColumn("dbo.AppUsers", "Email", c => c.String());
+            AddColumn("dbo.AppUsers", "Password", c => c.String());
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.Accommodations", "UserId", "dbo.AppUsers");
-            DropForeignKey("dbo.AppUsers", "RoomReservation_Id", "dbo.RoomReservations");
-            DropForeignKey("dbo.RoomReservationRooms", "Room_Id", "dbo.Rooms");
-            DropForeignKey("dbo.RoomReservationRooms", "RoomReservation_Id", "dbo.RoomReservations");
-            DropForeignKey("dbo.Rooms", "AccommodationId", "dbo.Accommodations");
             DropForeignKey("dbo.Accommodations", "PlaceId", "dbo.Places");
             DropForeignKey("dbo.Places", "RegionId", "dbo.Regions");
             DropForeignKey("dbo.Regions", "CountryId", "dbo.Countries");
             DropForeignKey("dbo.Comments", "UserId", "dbo.AppUsers");
+            DropForeignKey("dbo.RoomReservations", "RoomId", "dbo.Rooms");
+            DropForeignKey("dbo.Rooms", "AccommodationId", "dbo.Accommodations");
+            DropForeignKey("dbo.RoomReservations", "AppUserId", "dbo.AppUsers");
             DropForeignKey("dbo.Comments", "AccommodationId", "dbo.Accommodations");
             DropForeignKey("dbo.Accommodations", "AccommodationId", "dbo.AccommodationTypes");
-            DropIndex("dbo.RoomReservationRooms", new[] { "Room_Id" });
-            DropIndex("dbo.RoomReservationRooms", new[] { "RoomReservation_Id" });
-            DropIndex("dbo.Rooms", new[] { "AccommodationId" });
             DropIndex("dbo.Regions", new[] { "CountryId" });
             DropIndex("dbo.Places", new[] { "RegionId" });
-            DropIndex("dbo.AppUsers", new[] { "RoomReservation_Id" });
+            DropIndex("dbo.Rooms", new[] { "AccommodationId" });
+            DropIndex("dbo.RoomReservations", new[] { "AppUserId" });
+            DropIndex("dbo.RoomReservations", new[] { "RoomId" });
             DropIndex("dbo.Comments", new[] { "AccommodationId" });
             DropIndex("dbo.Comments", new[] { "UserId" });
             DropIndex("dbo.Accommodations", new[] { "UserId" });
             DropIndex("dbo.Accommodations", new[] { "PlaceId" });
             DropIndex("dbo.Accommodations", new[] { "AccommodationId" });
-            DropColumn("dbo.AppUsers", "RoomReservation_Id");
-            DropTable("dbo.RoomReservationRooms");
-            DropTable("dbo.RoomReservations");
-            DropTable("dbo.Rooms");
+            DropColumn("dbo.AppUsers", "Password");
+            DropColumn("dbo.AppUsers", "Email");
             DropTable("dbo.Countries");
             DropTable("dbo.Regions");
             DropTable("dbo.Places");
+            DropTable("dbo.Rooms");
+            DropTable("dbo.RoomReservations");
             DropTable("dbo.Comments");
             DropTable("dbo.AccommodationTypes");
             DropTable("dbo.Accommodations");

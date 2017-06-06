@@ -247,6 +247,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AppUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -256,13 +257,9 @@
     <Compile Include="Migrations\201706040304228_Initial.Designer.cs">
       <DependentUpon>201706040304228_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201706051133402_Relacije.cs" />
-    <Compile Include="Migrations\201706051133402_Relacije.Designer.cs">
-      <DependentUpon>201706051133402_Relacije.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706051140392_Relacije1.cs" />
-    <Compile Include="Migrations\201706051140392_Relacije1.Designer.cs">
-      <DependentUpon>201706051140392_Relacije1.cs</DependentUpon>
+    <Compile Include="Migrations\201706060831003_MyModel.cs" />
+    <Compile Include="Migrations\201706060831003_MyModel.Designer.cs">
+      <DependentUpon>201706060831003_MyModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Accommodation.cs" />
@@ -360,11 +357,8 @@
     <EmbeddedResource Include="Migrations\201706040304228_Initial.resx">
       <DependentUpon>201706040304228_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706051133402_Relacije.resx">
-      <DependentUpon>201706051133402_Relacije.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706051140392_Relacije1.resx">
-      <DependentUpon>201706051140392_Relacije1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706060831003_MyModel.resx">
+      <DependentUpon>201706060831003_MyModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
