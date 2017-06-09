@@ -31,6 +31,20 @@ namespace BookingApp.Migrations
             //    );
             //
 
+            context.AccommodationTypes.AddOrUpdate(
+                  a => a.Name,
+                  new AccommodationType { Name = "Jednokrevetna" },
+                  new AccommodationType { Name = "Dvokrevetna" }
+            );
+
+            context.Countrys.AddOrUpdate(
+                  c => c.Name,
+                  new Country { Name = "Srbija", Code=1 },
+                  new Country { Name = "Grcka", Code=2 }
+            );
+
+            context.SaveChanges();
+
             if (!context.Roles.Any(r => r.Name == "Admin"))
             {
                 var store = new RoleStore<IdentityRole>(context);
