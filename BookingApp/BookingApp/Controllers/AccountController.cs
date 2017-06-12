@@ -26,6 +26,8 @@ namespace BookingApp.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
 
+        private BAContext db = new BAContext();
+
         public AccountController()
         {
         }
@@ -328,17 +330,50 @@ namespace BookingApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new BAIdentityUser() { UserName = model.Email, Email = model.Email };
+            AppUser appUser = new AppUser() { Username = model.Username };
+            db.AppUsers.Add(appUser);
+            db.SaveChanges();
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            var userStore = new UserStore<BAIdentityUser>(db);
+            var userManager = new UserManager<BAIdentityUser>(userStore);
 
-            if (!result.Succeeded)
+            var user = new BAIdentityUser()
             {
-                return GetErrorResult(result);
-            }
+                UserName = model.Username,
+                Email = model.Email,
+                PasswordHash = BAIdentityUser.HashPassword(model.Password),
+                Id = appUser.Id.ToString()
+               // addUserId = appUser.Id
+            };
+
+            userManager.Create(user);
+            userManager.AddToRole(user.Id, model.Role);
 
             return Ok();
         }
+
+
+        // POST api/Account/Register
+        //[AllowAnonymous]
+        //[Route("Register")]
+        //public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var user = new BAIdentityUser() { UserName = model.Email, Email = model.Email };
+
+        //    IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+        //    if (!result.Succeeded)
+        //    {
+        //        return GetErrorResult(result);
+        //    }
+
+        //    return Ok();
+        //}
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
