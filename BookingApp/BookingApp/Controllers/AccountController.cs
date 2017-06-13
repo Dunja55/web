@@ -325,10 +325,10 @@ namespace BookingApp.Controllers
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             AppUser appUser = new AppUser() { Username = model.Username };
             db.AppUsers.Add(appUser);
@@ -343,7 +343,6 @@ namespace BookingApp.Controllers
                 Email = model.Email,
                 PasswordHash = BAIdentityUser.HashPassword(model.Password),
                 Id = appUser.Id.ToString()
-               // addUserId = appUser.Id
             };
 
             userManager.Create(user);
@@ -375,6 +374,8 @@ namespace BookingApp.Controllers
         //    return Ok();
         //}
 
+
+
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -391,7 +392,7 @@ namespace BookingApp.Controllers
             {
                 return InternalServerError();
             }
-
+            
             var user = new BAIdentityUser() { UserName = model.Email, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user);
