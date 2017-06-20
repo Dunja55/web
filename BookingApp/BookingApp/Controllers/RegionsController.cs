@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using BookingApp.Models;
+using System.Web.Http.Results;
 
 namespace BookingApp.Controllers
 {
@@ -87,9 +88,15 @@ namespace BookingApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            db.Regions.Add(region);
-            db.SaveChanges();
+            try
+            {
+                db.Regions.Add(region);
+                db.SaveChanges();
+            }
+            catch(DbUpdateException)
+            {
+                return new ResponseMessageResult(Request.CreateErrorResponse((HttpStatusCode)409, new HttpError("Region already exist!")));
+            }
 
             return CreatedAtRoute("RApi", new { id = region.Id }, region);
         }

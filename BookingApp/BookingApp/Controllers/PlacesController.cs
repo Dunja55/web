@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using BookingApp.Models;
+using System.Web.Http.Results;
 
 namespace BookingApp.Controllers
 {
@@ -87,9 +88,15 @@ namespace BookingApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            db.Places.Add(place);
-            db.SaveChanges();
+            try
+            {
+                db.Places.Add(place);
+                db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return new ResponseMessageResult(Request.CreateErrorResponse((HttpStatusCode)409, new HttpError("Place already exist!")));
+            }
 
             return CreatedAtRoute("PApi", new { id = place.Id }, place);
         }
