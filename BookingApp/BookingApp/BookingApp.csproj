@@ -281,6 +281,10 @@
     <Compile Include="Migrations\201706130739478_Registracija.Designer.cs">
       <DependentUpon>201706130739478_Registracija.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706201032058_novaMigracijaReservation.cs" />
+    <Compile Include="Migrations\201706201032058_novaMigracijaReservation.Designer.cs">
+      <DependentUpon>201706201032058_novaMigracijaReservation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Accommodation.cs" />
     <Compile Include="Models\AccommodationType.cs" />
@@ -382,6 +386,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706130739478_Registracija.resx">
       <DependentUpon>201706130739478_Registracija.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706201032058_novaMigracijaReservation.resx">
+      <DependentUpon>201706201032058_novaMigracijaReservation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

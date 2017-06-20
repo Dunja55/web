@@ -62,8 +62,8 @@ namespace BookingApp.Providers
 
             //Mora se dodati u header response-a kako bi se se Role atribut
             //mogao procitati na klijentskoj strani
-            context.OwinContext.Response.Headers.Add("Access-Control-Expose-Headers", new[] { "Role" });
-
+            context.OwinContext.Response.Headers.Add("Access-Control-Expose-Headers", new[] { "Role", "user_id" });
+            context.OwinContext.Response.Headers.Add("user_id", new[] { user.Id });
             //if (!user.EmailConfirmed)
             //{
             //    context.SetError("invalid_grant", "AppUser did not confirm email.");
@@ -73,6 +73,8 @@ namespace BookingApp.Providers
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
 
             var ticket = new AuthenticationTicket(oAuthIdentity, null);
+
+            
 
             context.Validated(ticket);
 

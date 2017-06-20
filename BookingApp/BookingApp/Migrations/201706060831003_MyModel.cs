@@ -27,7 +27,7 @@ namespace BookingApp.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AccommodationTypes", t => t.AccommodationId, cascadeDelete: true)
                 .ForeignKey("dbo.Places", t => t.PlaceId, cascadeDelete: true)
-                .ForeignKey("dbo.AppUsers", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.AppUsers", t => t.UserId, cascadeDelete: false)
                 .Index(t => t.AccommodationId)
                 .Index(t => t.PlaceId)
                 .Index(t => t.UserId);
